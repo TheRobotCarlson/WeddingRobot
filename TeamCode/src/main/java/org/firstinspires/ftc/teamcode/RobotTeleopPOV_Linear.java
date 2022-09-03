@@ -102,41 +102,52 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     public static final double boxMiddle = 0.73;
     public static final double boxBack = 0.78;
 
-    public static final double[] NEUTRAL_POSITION = {0.7, 0.5, 0.5, 0.00, CLAW_OPEN, FAN_SPEED_START};
-    public static final double[] FAN_RELEASE = {0.6, 0.5, 0.5, 0.00, CLAW_OPEN, FAN_SPEED_START};
-    public static final double[] FAN_POSITION = {0.6, 0.5, 0.5, 0.00, CLAW_SHUT, FAN_SPEED_START};
+    public static final double[] NEUTRAL_POSITION = {0.7, 0.5, 0.5, 0.00, CLAW_OPEN, FAN_SPEED_START, 10};
+    public static final double[] FAN_RELEASE = {0.6, 0.5, 0.5, 0.00, CLAW_OPEN, FAN_SPEED_START, 10};
+    public static final double[] FAN_POSITION = {0.6, 0.5, 0.5, 0.00, CLAW_SHUT, FAN_SPEED_START, 10};
 
-    public static final double[] BOX1 = {0.7, 0.75, boxMiddle, 0.00, CLAW_OPEN, FAN_SPEED_IDLE};
-    public static final double[] BOX1_CLOSED = {0.7, 0.75, boxMiddle, 0.00, CLAW_SHUT, FAN_SPEED_START};
+    public static final double[] BOX1 = {0.7, 0.75, boxMiddle, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 10};
+    public static final double[] BOX1_CLOSED = {0.7, 0.75, boxMiddle, 0.00, CLAW_SHUT, FAN_SPEED_START, 10};
 
-    public static final double[] BOX2 = {0.73, 0.7, boxBack, 0.00, CLAW_OPEN, FAN_SPEED_IDLE};
-    public static final double[] BOX2_CLOSED = {0.73, 0.7, boxBack, 0.00, CLAW_SHUT, FAN_SPEED_START};
+    public static final double[] BOX2 = {0.73, 0.7, boxBack, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 10};
+    public static final double[] BOX2_CLOSED = {0.73, 0.7, boxBack, 0.00, CLAW_SHUT, FAN_SPEED_START, 10};
 
-    public static final double[] BOX_SHAKE = {0.6, 0.7, boxMiddle, 0.00, CLAW_OPEN, FAN_SPEED_IDLE};
+    public static final double[] BOX_SHAKE1 = {0.6, 0.7, boxMiddle, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 2
+    };
+    public static final double[] BOX_SHAKE2 = {0.6, 0.7, boxMiddle, 0.50, CLAW_OPEN, FAN_SPEED_IDLE, 2};
 
-    public static final double[] BOX3 = {0.60, 0.7, boxBack, 0.00, CLAW_OPEN, FAN_SPEED_IDLE};
-    public static final double[] BOX3_CLOSED = {0.60, 0.7, boxBack, 0.00, CLAW_SHUT, FAN_SPEED_START};
+    public static final double[] BOX3 = {0.60, 0.7, boxBack, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 10};
+    public static final double[] BOX3_CLOSED = {0.60, 0.7, boxBack, 0.00, CLAW_SHUT, FAN_SPEED_START, 10};
     public static final double[][] SEQUENCE = {
 //            NEUTRAL_POSITION,
             BOX1,
-            BOX_SHAKE,
+            BOX_SHAKE1,
+            BOX_SHAKE2,
+            BOX_SHAKE1,
             BOX1_CLOSED,
             FAN_POSITION,
             FAN_RELEASE,
 //            NEUTRAL_POSITION,
             BOX2,
-            BOX_SHAKE,
+            BOX_SHAKE1,
+            BOX_SHAKE2,
+            BOX_SHAKE1,
             BOX2_CLOSED,
             FAN_POSITION,
             FAN_RELEASE,
 //            NEUTRAL_POSITION,
 //            FAN_POSITION,
             BOX3,
-            BOX_SHAKE,
+            BOX_SHAKE1,
+            BOX_SHAKE2,
+            BOX_SHAKE1,
             BOX3_CLOSED,
             FAN_POSITION,
             FAN_RELEASE
     };
+
+    public static double cyclesRemaining = BOX1[6];
+    public static int sequenceIndex = 0;
 
 
 
@@ -228,10 +239,16 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
 
     public void moveArm() {
         // automatically transition through the states, but pace it since we run every 50 ms
-        // {lrPos, turn1, turn2, clawTurn, claw, fan};
-        int position = (stateIndex / CYCLE_DIVIDE) % SEQUENCE.length;
-        telemetry.addData("position", "%d", position);
-        double[] armPos = SEQUENCE[position];
+        // {lrPos, turn1, turn2, clawTurn, claw, fan}
+        cyclesRemaining--;
+        if (cyclesRemaining <= 0) {
+            sequenceIndex = (sequenceIndex + 1) % SEQUENCE.length;
+            cyclesRemaining = SEQUENCE[sequenceIndex][6];
+        }
+//        int position = (stateIndex / CYCLE_DIVIDE) % SEQUENCE.length;
+//        telemetry.addData("position", "%d", position);
+//        double[] armPos = SEQUENCE[position];
+        double[] armPos = SEQUENCE[sequenceIndex];
 
 
         telemetry.addData("lrPos", "%.2f", armPos[0]);
