@@ -112,9 +112,8 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
     public static final double[] BOX2 = {0.73, 0.7, boxBack, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 10};
     public static final double[] BOX2_CLOSED = {0.73, 0.7, boxBack, 0.00, CLAW_SHUT, FAN_SPEED_START, 10};
 
-    public static final double[] BOX_SHAKE1 = {0.6, 0.7, boxMiddle, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 2
-    };
-    public static final double[] BOX_SHAKE2 = {0.6, 0.7, boxMiddle, 0.50, CLAW_OPEN, FAN_SPEED_IDLE, 2};
+    public static final double[] BOX_SHAKE1 = {0.6, 0.7, boxMiddle, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 3};
+    public static final double[] BOX_SHAKE2 = {0.6, 0.7, boxMiddle, 0.80, CLAW_OPEN, FAN_SPEED_IDLE, 3};
 
     public static final double[] BOX3 = {0.60, 0.7, boxBack, 0.00, CLAW_OPEN, FAN_SPEED_IDLE, 10};
     public static final double[] BOX3_CLOSED = {0.60, 0.7, boxBack, 0.00, CLAW_SHUT, FAN_SPEED_START, 10};
